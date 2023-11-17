@@ -11,7 +11,7 @@ import org.w3c.dom.events.Event;
 @Setter
 @Builder
 @Table(name = "prenotations")
-public class Prenotations {
+public class Prenotation {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
