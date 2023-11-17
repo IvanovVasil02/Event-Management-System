@@ -16,7 +16,7 @@ public class UsersRunner implements CommandLineRunner {
   public void run(String... args) throws Exception {
     for (int i = 0; i < 20; i++) {
       User user = User.builder().build();
-      usersService.saveRunnerUser(user);
+      usersService.save(user);
     }
   }
 }

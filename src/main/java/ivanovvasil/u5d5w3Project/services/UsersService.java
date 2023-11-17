@@ -22,9 +22,8 @@ public class UsersService {
   @Autowired
   private EventsService eventsService;
 
-  //Save for user runner
-  public User saveRunnerUser(User employee) {
-    return usersRepository.save(employee);
+  public User save(User user) {
+    return usersRepository.save(user);
   }
 
 

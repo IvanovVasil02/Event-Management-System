@@ -62,6 +62,7 @@ public class User implements UserDetails {
     return true;
   }
 
+
   public static class UsersBuilder {
     Faker f = new Faker(Locale.ITALY);
     private String name = f.name().firstName();
