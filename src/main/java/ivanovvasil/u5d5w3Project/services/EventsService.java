@@ -1,5 +1,7 @@
 package ivanovvasil.u5d5w3Project.services;
 
+import com.cloudinary.Cloudinary;
+import com.cloudinary.utils.ObjectUtils;
 import ivanovvasil.u5d5w3Project.entities.Event;
 import ivanovvasil.u5d5w3Project.entities.User;
 import ivanovvasil.u5d5w3Project.exceptions.NotFoundException;
@@ -12,6 +14,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.time.LocalDate;
@@ -23,7 +26,8 @@ public class EventsService {
   private EventsRepository eventsRepository;
   @Autowired
   private UsersRepository usersRepository;
-
+  @Autowired
+  private Cloudinary cloudinary;
 
   //to save event with runner
   public Event runnerSave(Event body) {
@@ -37,6 +41,11 @@ public class EventsService {
     newEvent.setDescription(body.description());
     newEvent.setLocation(body.location());
     newEvent.setDate(LocalDate.parse(body.date()));
+    if (body.picture() != null) {
+      newEvent.setPicture(body.picture());
+    } else {
+      newEvent.setPicture("https://spotme.com/wp-content/uploads/2020/07/Hero-1.jpg");
+    }
     newEvent.setManager(user);
     return eventsRepository.save(newEvent);
   }
@@ -78,5 +87,12 @@ public class EventsService {
   public List<Event> getUserEventsById(Long userId) {
     return eventsRepository.findAllByUserId(userId);
   }
-  
+
+  public Event uploadImg(Long id, MultipartFile file) throws IOException {
+    Event found = this.findById(id);
+    String urlImg = (String) cloudinary.uploader().upload(file.getBytes(), ObjectUtils.emptyMap()).get("url");
+    found.setPicture(urlImg);
+    eventsRepository.save(found);
+    return found;
+  }
 }

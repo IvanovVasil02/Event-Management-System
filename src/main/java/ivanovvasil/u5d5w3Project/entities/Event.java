@@ -24,6 +24,7 @@ public class Event {
   private LocalDate date;
   private String location;
   private int availablePlaces;
+  private String picture;
   @ManyToOne
   @JoinColumn(name = "manger_id")
   private User manager;
@@ -36,6 +37,7 @@ public class Event {
     private String description = f.lorem().paragraph();
     private String location = f.address().fullAddress();
     private int availablePlaces = new Random().nextInt(5, 20);
+    private String picture = f.internet().image();
 
     private LocalDate getRandomLocalDate(int year) {
       long minDay = LocalDate.now().toEpochDay();
