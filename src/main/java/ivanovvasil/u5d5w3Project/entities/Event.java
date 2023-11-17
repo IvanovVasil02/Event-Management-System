@@ -1,4 +1,4 @@
-package ivanovvasil.u5d5w5Project.entities;
+package ivanovvasil.u5d5w3Project.entities;
 
 import com.github.javafaker.Faker;
 import jakarta.persistence.*;
@@ -24,7 +24,7 @@ public class Event {
   private LocalDate date;
   private String location;
   private int availablePlaces;
-  @OneToOne
+  @ManyToOne
   @JoinColumn(name = "manger_id")
   private User manager;
 
