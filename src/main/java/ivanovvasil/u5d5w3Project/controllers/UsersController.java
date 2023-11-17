@@ -15,8 +15,8 @@ import org.springframework.web.method.annotation.MethodArgumentTypeMismatchExcep
 import java.io.IOException;
 
 @RestController
-@RequestMapping("/employees")
-public class UserController {
+@RequestMapping("/users")
+public class UsersController {
   @Autowired
   private UsersService usersService;
 
@@ -26,7 +26,6 @@ public class UserController {
                              @RequestParam(defaultValue = "id") String orderBy) {
     return usersService.findAll(page, size, orderBy);
   }
-
 
   @GetMapping("/{id}")
   public User getUser(@PathVariable Long id) {
