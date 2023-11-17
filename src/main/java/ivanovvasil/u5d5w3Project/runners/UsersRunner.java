@@ -5,8 +5,9 @@ import ivanovvasil.u5d5w3Project.services.UsersService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.core.annotation.Order;
+import org.springframework.stereotype.Component;
 
-//@Component
+@Component
 @Order(1)
 public class UsersRunner implements CommandLineRunner {
   @Autowired
@@ -16,7 +17,7 @@ public class UsersRunner implements CommandLineRunner {
   public void run(String... args) throws Exception {
     for (int i = 0; i < 20; i++) {
       User user = User.builder().build();
-      usersService.saveRunnerUser(user);
+      usersService.save(user);
     }
   }
 }
