@@ -7,6 +7,8 @@ import ivanovvasil.u5d5w3Project.services.UsersService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -21,6 +23,7 @@ public class UsersController {
   private UsersService usersService;
 
   @GetMapping("")
+  @PreAuthorize("hasAuthority('MANAGER')")
   public Page<User> getUsers(@RequestParam(defaultValue = "0") int page,
                              @RequestParam(defaultValue = "15") int size,
                              @RequestParam(defaultValue = "id") String orderBy) {
@@ -32,7 +35,13 @@ public class UsersController {
     return usersService.findById(id);
   }
 
+  @GetMapping("/me")
+  public User getProfile(@AuthenticationPrincipal User user) {
+    return user;
+  }
+
   @PutMapping("/{id}")
+  @PreAuthorize("hasAuthority('MANAGER')")
   public User editUser(@PathVariable Long id, @RequestBody @Validated UserDTO body, BindingResult validation) {
     if (validation.hasErrors()) {
       throw new BadRequestException("Empty or not respected fields", validation.getAllErrors());
@@ -45,13 +54,34 @@ public class UsersController {
         throw new RuntimeException(e);
       }
     }
+  }
 
+  @PutMapping("/me")
+  public User EditProfile(@AuthenticationPrincipal User user, @RequestBody @Validated UserDTO body, BindingResult validation) {
+    if (validation.hasErrors()) {
+      throw new BadRequestException("Empty or not respected fields", validation.getAllErrors());
+    } else {
+      try {
+        return usersService.findByIdAndUpdate(user.getId(), body);
+      } catch (MethodArgumentTypeMismatchException e) {
+        throw new BadRequestException("Entered id is invalid");
+      } catch (IOException e) {
+        throw new RuntimeException(e);
+      }
+    }
   }
 
   @DeleteMapping("/{id}")
+  @PreAuthorize("hasAuthority('MANAGER')")
   @ResponseStatus(HttpStatus.NO_CONTENT)
   public void deleteUser(@PathVariable Long id) {
     usersService.findByIdAndDelete(id);
+  }
+
+  @DeleteMapping("/me")
+  @ResponseStatus(HttpStatus.NO_CONTENT)
+  public void deleteProfile(@AuthenticationPrincipal User user) {
+    usersService.findByIdAndDelete(user.getId());
   }
 
 }

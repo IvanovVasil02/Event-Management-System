@@ -25,8 +25,8 @@ public class EventsService {
   private UsersRepository usersRepository;
 
 
-  //to save event post whit runner
-  public Event saveEventRunner(Event body) {
+  //to save event with runner
+  public Event runnerSave(Event body) {
     return eventsRepository.save(body);
   }
 
@@ -44,6 +44,11 @@ public class EventsService {
   public Page<Event> findAll(int page, int size, String orderBy) {
     Pageable pageable = PageRequest.of(page, size, Sort.by(orderBy));
     return eventsRepository.findAll(pageable);
+  }
+
+  //findAll for runner
+  public List<Event> runnerFindAll() {
+    return eventsRepository.findAll();
   }
 
   public List<Event> findAllById(Long id) {
@@ -73,6 +78,4 @@ public class EventsService {
   public List<Event> getUserEventsById(Long userId) {
     return eventsRepository.findAllByUserId(userId);
   }
-
-
 }

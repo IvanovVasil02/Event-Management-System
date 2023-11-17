@@ -7,6 +7,7 @@ import ivanovvasil.u5d5w3Project.services.EventsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -21,6 +22,7 @@ public class EventsController {
 
   @PostMapping("")
   @ResponseStatus(HttpStatus.CREATED)
+  @PreAuthorize("hasAuthority('MANAGER')")
   public Event addEvent(@RequestBody @Validated EventDTO body, BindingResult validation) {
     if (validation.hasErrors()) {
       throw new BadRequestException("Empty or not respected fields", validation.getAllErrors());
@@ -46,6 +48,7 @@ public class EventsController {
   }
 
   @PutMapping("/{id}")
+  @PreAuthorize("hasAuthority('MANAGER')")
   public Event editEvent(@PathVariable Long id, @RequestBody @Validated EventDTO body, BindingResult validation) {
 
     if (validation.hasErrors()) {
@@ -60,6 +63,7 @@ public class EventsController {
   }
 
   @DeleteMapping("/{id}")
+  @PreAuthorize("hasAuthority('MANAGER')")
   @ResponseStatus(HttpStatus.NO_CONTENT)
   public void findByIdAndDelete(@PathVariable Long id) {
     eventsService.findByIdAndDelete(id);
