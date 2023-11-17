@@ -1,10 +1,7 @@
 package ivanovvasil.u5d5w5Project.entities;
 
 import com.github.javafaker.Faker;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDate;
@@ -27,7 +24,9 @@ public class Event {
   private LocalDate date;
   private String location;
   private int availablePlaces;
-
+  @OneToOne
+  @JoinColumn(name = "manger_id")
+  private User manager;
 
   public static class EventsBuilder {
     Faker f = new Faker(Locale.ITALY);
