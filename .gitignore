@@ -32,4 +32,4 @@ build/
 ### VS Code ###
 .vscode/
 env.properties
-env.properties1
+env1.properties
