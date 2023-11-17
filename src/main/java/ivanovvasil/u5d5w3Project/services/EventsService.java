@@ -78,4 +78,5 @@ public class EventsService {
   public List<Event> getUserEventsById(Long userId) {
     return eventsRepository.findAllByUserId(userId);
   }
+  
 }

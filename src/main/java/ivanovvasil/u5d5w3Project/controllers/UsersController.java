@@ -29,7 +29,7 @@ public class UsersController {
                              @RequestParam(defaultValue = "id") String orderBy) {
     return usersService.findAll(page, size, orderBy);
   }
-
+  
   @GetMapping("/{id}")
   public User getUser(@PathVariable Long id) {
     return usersService.findById(id);

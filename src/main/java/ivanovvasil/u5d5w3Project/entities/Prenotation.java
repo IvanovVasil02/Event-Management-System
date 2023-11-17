@@ -2,7 +2,6 @@ package ivanovvasil.u5d5w3Project.entities;
 
 import jakarta.persistence.*;
 import lombok.*;
-import org.w3c.dom.events.Event;
 
 @Entity
 @NoArgsConstructor
@@ -18,6 +17,7 @@ public class Prenotation {
   @ManyToOne
   @JoinColumn(name = "user_id")
   private User user;
+  @ManyToOne
   @JoinColumn(name = "event_id")
   private Event event;
 }
