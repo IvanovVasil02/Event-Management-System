@@ -1,4 +1,4 @@
-package ivanovvasil.u5d5w3Project;
+package ivanovvasil.u5d5w5Project;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;

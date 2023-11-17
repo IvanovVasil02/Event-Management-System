@@ -1,8 +1,9 @@
-package ivanovvasil.u5d5w3Project.entities;
+package ivanovvasil.u5d5w5Project.entities;
 
 import com.github.javafaker.Faker;
-import ivanovvasil.u5d5w3Project.enums.Role;
-import jakarta.persistence.*;
+import ivanovvasil.u5d5w5Project.enums.Role;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Table;
 import lombok.*;
 
 import java.util.Locale;
@@ -15,16 +16,11 @@ import java.util.Locale;
 @Setter
 @Table(name = "users")
 public class User {
-  @Id
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
-  private Long id;
-  private String name;
-  private String surname;
-  private String email;
-  private String password;
-  @Enumerated(EnumType.STRING)
-  private Role role;
-
+private String name;
+private String surname;
+private String email;
+private String password;
+private Role role;
   public static class UsersBuilder {
     Faker f = new Faker(Locale.ITALY);
     private String name = f.name().firstName();
