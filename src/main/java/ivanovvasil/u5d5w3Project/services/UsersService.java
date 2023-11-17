@@ -3,6 +3,7 @@ package ivanovvasil.u5d5w3Project.services;
 import ivanovvasil.u5d5w3Project.entities.Event;
 import ivanovvasil.u5d5w3Project.entities.User;
 import ivanovvasil.u5d5w3Project.exceptions.NotFoundException;
+import ivanovvasil.u5d5w3Project.payloadsDTO.UserDTO;
 import ivanovvasil.u5d5w3Project.repositories.UsersRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -11,6 +12,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import java.io.IOException;
 import java.util.List;
 
 @Service
@@ -42,6 +44,14 @@ public class UsersService {
 
   public User findByEmail(String email) {
     return usersRepository.findByEmail(email).orElseThrow(() -> new NotFoundException("No user found with this email: " + email));
+  }
+
+  public User findByIdAndUpdate(Long id, UserDTO body) throws IOException {
+    User found = this.findById(id);
+    found.setName(body.name());
+    found.setSurname(body.surname());
+    found.setEmail(body.email());
+    return usersRepository.save(found);
   }
 
   public void findByIdAndDelete(Long id) throws NotFoundException {
