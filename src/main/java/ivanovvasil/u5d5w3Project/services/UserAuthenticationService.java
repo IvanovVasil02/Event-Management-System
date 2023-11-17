@@ -36,8 +36,8 @@ public class UserAuthenticationService {
     user.setEmail(body.email());
     user.setPassword(passwordEncoder.encode(body.password()));
     user.setRole(Role.USER);
-    String token = jwTools.createToken(user);
     usersRepository.save(user);
+    String token = jwTools.createToken(user);
     return new CreatedUserDTO(user.getId(), user.getName(), user.getSurname(), user.getEmail(), token);
   }
 
