@@ -1,10 +1,11 @@
 package ivanovvasil.u5d5w3Project.controllers;
 
 import ivanovvasil.u5d5w3Project.entities.Event;
-import ivanovvasil.u5d5w3Project.entities.Prenotation;
 import ivanovvasil.u5d5w3Project.entities.User;
 import ivanovvasil.u5d5w3Project.exceptions.BadRequestException;
 import ivanovvasil.u5d5w3Project.payloadsDTO.EventDTO;
+import ivanovvasil.u5d5w3Project.payloadsDTO.EventResponseDTO;
+import ivanovvasil.u5d5w3Project.payloadsDTO.PrenotationResponseDTO;
 import ivanovvasil.u5d5w3Project.services.EventsService;
 import ivanovvasil.u5d5w3Project.services.PrenotationsService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,7 +30,7 @@ public class EventsController {
   @PostMapping("")
   @ResponseStatus(HttpStatus.CREATED)
   @PreAuthorize("hasAuthority('MANAGER')")
-  public Event addEvent(@AuthenticationPrincipal User admin, @RequestBody @Validated EventDTO body, BindingResult validation) {
+  public EventResponseDTO addEvent(@AuthenticationPrincipal User admin, @RequestBody @Validated EventDTO body, BindingResult validation) {
     if (validation.hasErrors()) {
       throw new BadRequestException("Empty or not respected fields", validation.getAllErrors());
     } else {
@@ -42,20 +43,20 @@ public class EventsController {
   }
 
   @PostMapping("/{event_id}/bookMe")
-  public Prenotation bookEvent(@AuthenticationPrincipal User user, @PathVariable Long event_id) {
+  public PrenotationResponseDTO bookEvent(@AuthenticationPrincipal User user, @PathVariable Long event_id) {
     return prenotationsService.bookEvent(user, event_id);
   }
 
   @GetMapping("")
-  public Page<Event> getEvents(@RequestParam(defaultValue = "0") int page,
-                               @RequestParam(defaultValue = "15") int size,
-                               @RequestParam(defaultValue = "id") String orderBy) {
+  public Page<EventResponseDTO> getEvents(@RequestParam(defaultValue = "0") int page,
+                                          @RequestParam(defaultValue = "15") int size,
+                                          @RequestParam(defaultValue = "id") String orderBy) {
     return eventsService.findAll(page, size, orderBy);
   }
 
   @GetMapping("/{id}")
-  public Event getEvent(@PathVariable Long id) {
-    return eventsService.findById(id);
+  public EventResponseDTO getEvent(@PathVariable Long id) {
+    return eventsService.getEventByid(id);
   }
 
   @PutMapping("/{id}")

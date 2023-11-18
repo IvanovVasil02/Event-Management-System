@@ -67,6 +67,12 @@ public class ExceptionsHandler {
     return new ErrorsResponseDTO(e.getMessage(), new Date());
   }
 
+  @ExceptionHandler(NoAvailablePlacesException.class)
+  @ResponseStatus(HttpStatus.FORBIDDEN)
+  public ErrorsResponseDTO handleNoAvailablePlaces(HttpRequestMethodNotSupportedException e) {
+    return new ErrorsResponseDTO(e.getMessage(), new Date());
+  }
+
   @ExceptionHandler(Exception.class)
   @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
   public ErrorsResponseDTO handleGeneric(Exception e) {

@@ -6,6 +6,7 @@ import ivanovvasil.u5d5w3Project.entities.Event;
 import ivanovvasil.u5d5w3Project.entities.User;
 import ivanovvasil.u5d5w3Project.exceptions.NotFoundException;
 import ivanovvasil.u5d5w3Project.payloadsDTO.EventDTO;
+import ivanovvasil.u5d5w3Project.payloadsDTO.EventResponseDTO;
 import ivanovvasil.u5d5w3Project.repositories.EventsRepository;
 import ivanovvasil.u5d5w3Project.repositories.UsersRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,7 +35,7 @@ public class EventsService {
     return eventsRepository.save(body);
   }
 
-  public Event save(User admin, EventDTO body) throws IOException {
+  public EventResponseDTO save(User admin, EventDTO body) throws IOException {
     User user = usersRepository.findById(admin.getId()).orElseThrow(() -> new NotFoundException(admin.getId()));
     Event newEvent = new Event();
     newEvent.setTitle(body.title());
@@ -47,12 +48,14 @@ public class EventsService {
       newEvent.setPicture("https://spotme.com/wp-content/uploads/2020/07/Hero-1.jpg");
     }
     newEvent.setManager(user);
-    return eventsRepository.save(newEvent);
+    eventsRepository.save(newEvent);
+    return this.converToEventDTO(newEvent);
   }
 
-  public Page<Event> findAll(int page, int size, String orderBy) {
+  public Page<EventResponseDTO> findAll(int page, int size, String orderBy) {
     Pageable pageable = PageRequest.of(page, size, Sort.by(orderBy));
-    return eventsRepository.findAll(pageable);
+    Page<Event> eventPage = eventsRepository.findAll(pageable);
+    return eventPage.map(this::converToEventDTO);
   }
 
   //findAll for runner
@@ -68,8 +71,24 @@ public class EventsService {
     return eventsRepository.findById(id).orElseThrow(() -> new NotFoundException(id));
   }
 
-  public void findByIdAndDelete(Long id) throws NotFoundException {
-    eventsRepository.delete(this.findById(id));
+  public List<Event> getUserEventsById(Long userId) {
+    return eventsRepository.findAllByUserId(userId);
+  }
+
+  public Event uploadImg(Long id, MultipartFile file) throws IOException {
+    Event found = this.findById(id);
+    String urlImg = (String) cloudinary.uploader().upload(file.getBytes(), ObjectUtils.emptyMap()).get("url");
+    found.setPicture(urlImg);
+    eventsRepository.save(found);
+    return found;
+  }
+
+  public EventResponseDTO getEventByid(Long id) throws NotFoundException {
+    Event event = this.findById(id);
+    return new EventResponseDTO(event.getTitle(), event.getDescription(),
+            event.getDate().toString(), event.getLocation(), event.getAvailablePlaces(),
+            event.getPicture(), event.getManager().getUsername());
+
   }
 
   public Event findByIdAndUpdate(User admin, Long id, EventDTO body) throws IOException {
@@ -84,15 +103,14 @@ public class EventsService {
     return event;
   }
 
-  public List<Event> getUserEventsById(Long userId) {
-    return eventsRepository.findAllByUserId(userId);
+  public void findByIdAndDelete(Long id) throws NotFoundException {
+    eventsRepository.delete(this.findById(id));
   }
 
-  public Event uploadImg(Long id, MultipartFile file) throws IOException {
-    Event found = this.findById(id);
-    String urlImg = (String) cloudinary.uploader().upload(file.getBytes(), ObjectUtils.emptyMap()).get("url");
-    found.setPicture(urlImg);
-    eventsRepository.save(found);
-    return found;
+  public EventResponseDTO converToEventDTO(Event event) {
+    return new EventResponseDTO(event.getTitle(), event.getDescription(),
+            event.getDate().toString(), event.getLocation(),
+            event.getAvailablePlaces(), event.getPicture(),
+            event.getManager().getUsername());
   }
 }

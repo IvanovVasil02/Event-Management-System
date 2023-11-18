@@ -11,4 +11,6 @@ import java.util.List;
 public interface PrenotationsRepository extends JpaRepository<Prenotation, Long> {
 
   List<Prenotation> findAllByUser(User user);
+
+  List<Prenotation> findAllById(Long id);
 }

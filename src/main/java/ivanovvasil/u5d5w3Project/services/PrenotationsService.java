@@ -3,7 +3,10 @@ package ivanovvasil.u5d5w3Project.services;
 import ivanovvasil.u5d5w3Project.entities.Event;
 import ivanovvasil.u5d5w3Project.entities.Prenotation;
 import ivanovvasil.u5d5w3Project.entities.User;
+import ivanovvasil.u5d5w3Project.exceptions.NoAvailablePlacesException;
 import ivanovvasil.u5d5w3Project.exceptions.NotFoundException;
+import ivanovvasil.u5d5w3Project.payloadsDTO.EventResponseDTO;
+import ivanovvasil.u5d5w3Project.payloadsDTO.PrenotationResponseDTO;
 import ivanovvasil.u5d5w3Project.repositories.PrenotationsRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -29,7 +32,7 @@ public class PrenotationsService {
     Pageable pageable = PageRequest.of(page, size, Sort.by(orderBy));
     return prenotationsRepository.findAll(pageable);
   }
-  
+
   public List<Prenotation> findAllByUser(User user) {
     return prenotationsRepository.findAllByUser(user);
   }
@@ -42,12 +45,18 @@ public class PrenotationsService {
     prenotationsRepository.deleteById(id);
   }
 
-  public Prenotation bookEvent(User user, Long id) {
+  public PrenotationResponseDTO bookEvent(User user, Long id) {
     Event event = eventsService.findById(id);
+    EventResponseDTO eventResponseDTO = eventsService.converToEventDTO(event);
+    int totalPrenotation = prenotationsRepository.findAllById(id).size();
+    if (totalPrenotation < event.getAvailablePlaces()) {
+      Prenotation prenotation = Prenotation.builder().user(user).event(event).build();
+      prenotationsRepository.save(prenotation);
+      return new PrenotationResponseDTO(user, eventResponseDTO);
+    } else {
+      throw new NoAvailablePlacesException();
+    }
 
-    Prenotation prenotation = Prenotation.builder().user(user).event(event).build();
-    prenotationsRepository.save(prenotation);
-    return prenotation;
   }
 
 }

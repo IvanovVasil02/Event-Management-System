@@ -1,5 +1,6 @@
 package ivanovvasil.u5d5w3Project.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.github.javafaker.Faker;
 import ivanovvasil.u5d5w3Project.enums.Role;
@@ -31,6 +32,7 @@ public class User implements UserDetails {
   private String password;
   @Enumerated(EnumType.STRING)
   private Role role;
+  @JsonIgnore
   @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE)
   private List<Prenotation> prenotationList;
 
@@ -41,7 +43,7 @@ public class User implements UserDetails {
 
   @Override
   public String getUsername() {
-    return this.email;
+    return this.name + " " + this.surname;
   }
 
   @Override
@@ -71,7 +73,7 @@ public class User implements UserDetails {
     private String surname = f.name().lastName();
     private String email = f.internet().emailAddress();
     private String password = f.internet().password();
-    private Role role = Role.getRandomRole();
+    private Role role = Role.USER;
 
   }
 }
