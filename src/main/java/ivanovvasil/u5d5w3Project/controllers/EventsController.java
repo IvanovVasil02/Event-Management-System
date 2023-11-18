@@ -29,12 +29,12 @@ public class EventsController {
   @PostMapping("")
   @ResponseStatus(HttpStatus.CREATED)
   @PreAuthorize("hasAuthority('MANAGER')")
-  public Event addEvent(@RequestBody @Validated EventDTO body, BindingResult validation) {
+  public Event addEvent(@AuthenticationPrincipal User admin, @RequestBody @Validated EventDTO body, BindingResult validation) {
     if (validation.hasErrors()) {
       throw new BadRequestException("Empty or not respected fields", validation.getAllErrors());
     } else {
       try {
-        return eventsService.save(body);
+        return eventsService.save(admin, body);
       } catch (IOException e) {
         throw new RuntimeException(e);
       }
@@ -60,13 +60,13 @@ public class EventsController {
 
   @PutMapping("/{id}")
   @PreAuthorize("hasAuthority('MANAGER')")
-  public Event editEvent(@PathVariable Long id, @RequestBody @Validated EventDTO body, BindingResult validation) {
+  public Event editEvent(@AuthenticationPrincipal User admin, @PathVariable Long id, @RequestBody @Validated EventDTO body, BindingResult validation) {
 
     if (validation.hasErrors()) {
       throw new BadRequestException("Empty or not respected fields", validation.getAllErrors());
     } else {
       try {
-        return eventsService.findByIdAndUpdate(id, body);
+        return eventsService.findByIdAndUpdate(admin, id, body);
       } catch (IOException e) {
         throw new RuntimeException(e);
       }

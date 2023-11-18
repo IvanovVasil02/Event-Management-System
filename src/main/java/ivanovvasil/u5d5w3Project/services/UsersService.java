@@ -27,8 +27,10 @@ public class UsersService {
   @Autowired
   private PrenotationsService prenotationsService;
 
-  public User save(User user) {
-    return usersRepository.save(user);
+  public void save(User user) {
+    if (!usersRepository.existsByEmail(user.getEmail())) {
+      usersRepository.save(user);
+    }
   }
 
 

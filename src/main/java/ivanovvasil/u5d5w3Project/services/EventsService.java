@@ -34,8 +34,8 @@ public class EventsService {
     return eventsRepository.save(body);
   }
 
-  public Event save(EventDTO body) throws IOException {
-    User user = usersRepository.findById(body.user_id()).orElseThrow(() -> new NotFoundException(body.user_id()));
+  public Event save(User admin, EventDTO body) throws IOException {
+    User user = usersRepository.findById(admin.getId()).orElseThrow(() -> new NotFoundException(admin.getId()));
     Event newEvent = new Event();
     newEvent.setTitle(body.title());
     newEvent.setDescription(body.description());
@@ -72,9 +72,9 @@ public class EventsService {
     eventsRepository.delete(this.findById(id));
   }
 
-  public Event findByIdAndUpdate(Long id, EventDTO body) throws IOException {
-    Event event = this.findById(body.user_id());
-    User user = usersRepository.findById(body.user_id()).orElseThrow(() -> new NotFoundException(body.user_id()));
+  public Event findByIdAndUpdate(User admin, Long id, EventDTO body) throws IOException {
+    Event event = this.findById(admin.getId());
+    User user = usersRepository.findById(admin.getId()).orElseThrow(() -> new NotFoundException(admin.getId()));
     event.setTitle(body.title());
     event.setDescription(body.description());
     event.setLocation(body.location());
