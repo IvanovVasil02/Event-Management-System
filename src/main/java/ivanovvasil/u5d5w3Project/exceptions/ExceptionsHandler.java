@@ -69,7 +69,7 @@ public class ExceptionsHandler {
 
   @ExceptionHandler(NoAvailablePlacesException.class)
   @ResponseStatus(HttpStatus.FORBIDDEN)
-  public ErrorsResponseDTO handleNoAvailablePlaces(HttpRequestMethodNotSupportedException e) {
+  public ErrorsResponseDTO handleNoAvailablePlaces(NoAvailablePlacesException e) {
     return new ErrorsResponseDTO(e.getMessage(), new Date());
   }
 

@@ -42,6 +42,7 @@ public class EventsService {
     newEvent.setDescription(body.description());
     newEvent.setLocation(body.location());
     newEvent.setDate(LocalDate.parse(body.date()));
+    newEvent.setAvailablePlaces(body.availablePlaces());
     if (body.picture() != null) {
       newEvent.setPicture(body.picture());
     } else {
@@ -85,9 +86,7 @@ public class EventsService {
 
   public EventResponseDTO getEventByid(Long id) throws NotFoundException {
     Event event = this.findById(id);
-    return new EventResponseDTO(event.getTitle(), event.getDescription(),
-            event.getDate().toString(), event.getLocation(), event.getAvailablePlaces(),
-            event.getPicture(), event.getManager().getUsername());
+    return converToEventDTO(event);
 
   }
 
@@ -108,7 +107,7 @@ public class EventsService {
   }
 
   public EventResponseDTO converToEventDTO(Event event) {
-    return new EventResponseDTO(event.getTitle(), event.getDescription(),
+    return new EventResponseDTO(event.getId(), event.getTitle(), event.getDescription(),
             event.getDate().toString(), event.getLocation(),
             event.getAvailablePlaces(), event.getPicture(),
             event.getManager().getUsername());

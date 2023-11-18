@@ -3,6 +3,7 @@ package ivanovvasil.u5d5w3Project.controllers;
 import ivanovvasil.u5d5w3Project.entities.Event;
 import ivanovvasil.u5d5w3Project.entities.User;
 import ivanovvasil.u5d5w3Project.exceptions.BadRequestException;
+import ivanovvasil.u5d5w3Project.exceptions.NoAvailablePlacesException;
 import ivanovvasil.u5d5w3Project.payloadsDTO.EventDTO;
 import ivanovvasil.u5d5w3Project.payloadsDTO.EventResponseDTO;
 import ivanovvasil.u5d5w3Project.payloadsDTO.PrenotationResponseDTO;
@@ -44,7 +45,11 @@ public class EventsController {
 
   @PostMapping("/{event_id}/bookMe")
   public PrenotationResponseDTO bookEvent(@AuthenticationPrincipal User user, @PathVariable Long event_id) {
-    return prenotationsService.bookEvent(user, event_id);
+    try {
+      return prenotationsService.bookEvent(user, event_id);
+    } catch (NoAvailablePlacesException e) {
+      throw new NoAvailablePlacesException();
+    }
   }
 
   @GetMapping("")

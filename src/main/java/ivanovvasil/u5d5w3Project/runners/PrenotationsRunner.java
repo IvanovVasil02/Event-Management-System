@@ -27,7 +27,7 @@ public class PrenotationsRunner implements CommandLineRunner {
 
   @Override
   public void run(String... args) throws Exception {
-    List<User> userList = usersService.findAllByRole(Role.MANAGER);
+    List<User> userList = usersService.findAllByRole(Role.USER);
     List<Event> eventList = eventsService.runnerFindAll();
     for (int i = 0; i < 20; i++) {
       Prenotation prenotation = Prenotation.builder()

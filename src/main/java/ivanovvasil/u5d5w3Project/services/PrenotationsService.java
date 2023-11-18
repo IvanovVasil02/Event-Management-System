@@ -45,11 +45,12 @@ public class PrenotationsService {
     prenotationsRepository.deleteById(id);
   }
 
-  public PrenotationResponseDTO bookEvent(User user, Long id) {
+  public PrenotationResponseDTO bookEvent(User user, Long id) throws NoAvailablePlacesException {
     Event event = eventsService.findById(id);
+    event.setAvailablePlaces(event.getAvailablePlaces() - 1);
     EventResponseDTO eventResponseDTO = eventsService.converToEventDTO(event);
     int totalPrenotation = prenotationsRepository.findAllById(id).size();
-    if (totalPrenotation < event.getAvailablePlaces()) {
+    if (event.getAvailablePlaces() > 0) {
       Prenotation prenotation = Prenotation.builder().user(user).event(event).build();
       prenotationsRepository.save(prenotation);
       return new PrenotationResponseDTO(user, eventResponseDTO);
