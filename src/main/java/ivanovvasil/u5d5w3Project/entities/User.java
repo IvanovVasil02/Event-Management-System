@@ -13,6 +13,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import java.util.Collection;
 import java.util.List;
 import java.util.Locale;
+import java.util.Objects;
 
 @Entity
 @AllArgsConstructor
@@ -35,6 +36,14 @@ public class User implements UserDetails {
   @JsonIgnore
   @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE)
   private List<Prenotation> prenotationList;
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) return true;
+    if (o == null || getClass() != o.getClass()) return false;
+    User user = (User) o;
+    return Objects.equals(id, user.id) && Objects.equals(name, user.name) && Objects.equals(surname, user.surname) && Objects.equals(email, user.email);
+  }
 
   @Override
   public Collection<? extends GrantedAuthority> getAuthorities() {
@@ -66,6 +75,17 @@ public class User implements UserDetails {
     return true;
   }
 
+  @Override
+  public String toString() {
+    return "User{" +
+            "id=" + id +
+            ", name='" + name + '\'' +
+            ", surname='" + surname + '\'' +
+            ", email='" + email + '\'' +
+            ", password='" + password + '\'' +
+            ", role=" + role +
+            '}';
+  }
 
   public static class UsersBuilder {
     Faker f = new Faker(Locale.ITALY);
