@@ -2,6 +2,7 @@ package ivanovvasil.u5d5w3Project.services;
 
 import ivanovvasil.u5d5w3Project.entities.Event;
 import ivanovvasil.u5d5w3Project.entities.User;
+import ivanovvasil.u5d5w3Project.enums.Role;
 import ivanovvasil.u5d5w3Project.exceptions.NotFoundException;
 import ivanovvasil.u5d5w3Project.payloadsDTO.UserDTO;
 import ivanovvasil.u5d5w3Project.repositories.UsersRepository;
@@ -28,8 +29,8 @@ public class UsersService {
 
 
   //findALl for users runner
-  public List<User> runnerFindAll() {
-    return usersRepository.findAll();
+  public List<User> findAllByRole(Role role) {
+    return usersRepository.findAllByRole(role);
   }
 
   public Page<User> findAll(int page, int size, String orderBy) {

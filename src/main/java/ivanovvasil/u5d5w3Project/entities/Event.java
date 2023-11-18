@@ -15,6 +15,7 @@ import java.util.concurrent.ThreadLocalRandom;
 @Getter
 @Setter
 @Builder(builderClassName = "EventsBuilder")
+@Table(name = "events")
 public class Event {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -23,6 +24,7 @@ public class Event {
   private String description;
   private LocalDate date;
   private String location;
+  @Column(name = "available_places")
   private int availablePlaces;
   private String picture;
   @ManyToOne

@@ -3,6 +3,7 @@ package ivanovvasil.u5d5w3Project.runners;
 import ivanovvasil.u5d5w3Project.entities.Event;
 import ivanovvasil.u5d5w3Project.entities.Prenotation;
 import ivanovvasil.u5d5w3Project.entities.User;
+import ivanovvasil.u5d5w3Project.enums.Role;
 import ivanovvasil.u5d5w3Project.services.EventsService;
 import ivanovvasil.u5d5w3Project.services.PrenotationsService;
 import ivanovvasil.u5d5w3Project.services.UsersService;
@@ -26,7 +27,7 @@ public class PrenotationsRunner implements CommandLineRunner {
 
   @Override
   public void run(String... args) throws Exception {
-    List<User> userList = usersService.runnerFindAll();
+    List<User> userList = usersService.findAllByRole(Role.MANAGER);
     List<Event> eventList = eventsService.runnerFindAll();
     for (int i = 0; i < 20; i++) {
       Prenotation prenotation = Prenotation.builder()
