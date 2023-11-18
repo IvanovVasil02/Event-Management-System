@@ -5,6 +5,7 @@ import ivanovvasil.u5d5w3Project.exceptions.ExceptionPayloads.ErrorsListResponse
 import ivanovvasil.u5d5w3Project.exceptions.ExceptionPayloads.ErrorsResponseDTO;
 import org.springframework.context.support.DefaultMessageSourceResolvable;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -39,6 +40,12 @@ public class ExceptionsHandler {
   @ExceptionHandler(MethodArgumentNotValidException.class)
   @ResponseStatus(HttpStatus.NOT_FOUND)
   public ErrorsResponseDTO handleMethodArgumentNotValidException(BadRequestException e) {
+    return new ErrorsResponseDTO(e.getMessage(), new Date());
+  }
+
+  @ExceptionHandler(HttpMessageNotReadableException.class)
+  @ResponseStatus(HttpStatus.BAD_REQUEST)
+  public ErrorsResponseDTO handleHttpMessageNotReadableException(HttpMessageNotReadableException e) {
     return new ErrorsResponseDTO(e.getMessage(), new Date());
   }
 

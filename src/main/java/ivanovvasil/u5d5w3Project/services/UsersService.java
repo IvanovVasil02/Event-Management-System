@@ -5,8 +5,10 @@ import ivanovvasil.u5d5w3Project.entities.Prenotation;
 import ivanovvasil.u5d5w3Project.entities.User;
 import ivanovvasil.u5d5w3Project.enums.Role;
 import ivanovvasil.u5d5w3Project.exceptions.NotFoundException;
+import ivanovvasil.u5d5w3Project.payloadsDTO.AdminProfileResponseDTO;
 import ivanovvasil.u5d5w3Project.payloadsDTO.ProfileResponseDTO;
 import ivanovvasil.u5d5w3Project.payloadsDTO.UserDTO;
+import ivanovvasil.u5d5w3Project.payloadsDTO.UserProfileResponseDTO;
 import ivanovvasil.u5d5w3Project.repositories.UsersRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -71,7 +73,12 @@ public class UsersService {
 
   public ProfileResponseDTO getUserProfile(User user) {
     List<Prenotation> prenotationList = prenotationsService.findAllByUser(user);
-    return new ProfileResponseDTO(user, prenotationList);
+    if (user.getRole().equals(Role.USER)) {
+      return new UserProfileResponseDTO(user, prenotationList);
+    } else {
+      List<Event> eventList = eventsService.getUserEventsById(user.getId());
+      return new AdminProfileResponseDTO(user, prenotationList, eventList);
+    }
   }
 
   public void deletePrenotationById(User user, Long id) {
