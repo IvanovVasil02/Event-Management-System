@@ -86,4 +86,10 @@ public class UsersController {
     usersService.findByIdAndDelete(user.getId());
   }
 
+  @DeleteMapping("/me/{prenotation_id}")
+  @ResponseStatus(HttpStatus.NO_CONTENT)
+  public void deletePrenotation(@AuthenticationPrincipal User user, @PathVariable Long prenotation_id) {
+    usersService.deletePrenotationById(user, prenotation_id);
+  }
+
 }

@@ -71,4 +71,8 @@ public class UsersService {
     List<Prenotation> prenotationList = prenotationsService.findAllByUser(user);
     return new ProfileResponseDTO(user, prenotationList);
   }
+
+  public void deletePrenotationById(User user, Long id) {
+    prenotationsService.findByIdAndDelete(id);
+  }
 }

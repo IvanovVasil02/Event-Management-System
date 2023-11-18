@@ -29,7 +29,7 @@ public class PrenotationsService {
     Pageable pageable = PageRequest.of(page, size, Sort.by(orderBy));
     return prenotationsRepository.findAll(pageable);
   }
-
+  
   public List<Prenotation> findAllByUser(User user) {
     return prenotationsRepository.findAllByUser(user);
   }
