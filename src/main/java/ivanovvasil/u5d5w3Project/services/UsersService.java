@@ -63,10 +63,6 @@ public class UsersService {
   }
 
   public void findByIdAndDelete(Long id) throws NotFoundException {
-    List<Event> eventsList = eventsService.getUserEventsById(id);
-    eventsList.forEach(event -> {
-      eventsService.findByIdAndDelete(event.getId());
-    });
     usersRepository.delete(this.findById(id));
   }
 

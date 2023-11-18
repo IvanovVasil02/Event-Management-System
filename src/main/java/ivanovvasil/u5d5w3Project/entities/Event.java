@@ -1,10 +1,12 @@
 package ivanovvasil.u5d5w3Project.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.github.javafaker.Faker;
 import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Locale;
 import java.util.Random;
 import java.util.concurrent.ThreadLocalRandom;
@@ -30,6 +32,9 @@ public class Event {
   @ManyToOne
   @JoinColumn(name = "manger_id")
   private User manager;
+  @JsonIgnore
+  @OneToMany(mappedBy = "event", cascade = CascadeType.REMOVE)
+  private List<Prenotation> prenotationList;
 
   public static class EventsBuilder {
     Faker f = new Faker(Locale.ITALY);

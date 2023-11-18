@@ -31,6 +31,8 @@ public class User implements UserDetails {
   private String password;
   @Enumerated(EnumType.STRING)
   private Role role;
+  @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE)
+  private List<Prenotation> prenotationList;
 
   @Override
   public Collection<? extends GrantedAuthority> getAuthorities() {
