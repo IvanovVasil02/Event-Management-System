@@ -1,9 +1,11 @@
 package ivanovvasil.u5d5w3Project.services;
 
 import ivanovvasil.u5d5w3Project.entities.Event;
+import ivanovvasil.u5d5w3Project.entities.Prenotation;
 import ivanovvasil.u5d5w3Project.entities.User;
 import ivanovvasil.u5d5w3Project.enums.Role;
 import ivanovvasil.u5d5w3Project.exceptions.NotFoundException;
+import ivanovvasil.u5d5w3Project.payloadsDTO.ProfileResponseDTO;
 import ivanovvasil.u5d5w3Project.payloadsDTO.UserDTO;
 import ivanovvasil.u5d5w3Project.repositories.UsersRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,6 +24,8 @@ public class UsersService {
   private UsersRepository usersRepository;
   @Autowired
   private EventsService eventsService;
+  @Autowired
+  private PrenotationsService prenotationsService;
 
   public User save(User user) {
     return usersRepository.save(user);
@@ -63,4 +67,8 @@ public class UsersService {
   }
 
 
+  public ProfileResponseDTO getUserProfile(User user) {
+    List<Prenotation> prenotationList = prenotationsService.findAllByUser(user);
+    return new ProfileResponseDTO(user, prenotationList);
+  }
 }

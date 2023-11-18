@@ -2,6 +2,7 @@ package ivanovvasil.u5d5w3Project.controllers;
 
 import ivanovvasil.u5d5w3Project.entities.User;
 import ivanovvasil.u5d5w3Project.exceptions.BadRequestException;
+import ivanovvasil.u5d5w3Project.payloadsDTO.ProfileResponseDTO;
 import ivanovvasil.u5d5w3Project.payloadsDTO.UserDTO;
 import ivanovvasil.u5d5w3Project.services.UsersService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,16 +30,17 @@ public class UsersController {
                              @RequestParam(defaultValue = "id") String orderBy) {
     return usersService.findAll(page, size, orderBy);
   }
-  
+
   @GetMapping("/{id}")
   public User getUser(@PathVariable Long id) {
     return usersService.findById(id);
   }
 
   @GetMapping("/me")
-  public User getProfile(@AuthenticationPrincipal User user) {
-    return user;
+  public ProfileResponseDTO getProfile(@AuthenticationPrincipal User user) {
+    return usersService.getUserProfile(user);
   }
+
 
   @PutMapping("/{id}")
   @PreAuthorize("hasAuthority('MANAGER')")

@@ -12,10 +12,10 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class PrenotationsService {
-  @Autowired
-  UsersService usersService;
   @Autowired
   EventsService eventsService;
   @Autowired
@@ -28,6 +28,10 @@ public class PrenotationsService {
   public Page<Prenotation> findAll(int page, int size, String orderBy) {
     Pageable pageable = PageRequest.of(page, size, Sort.by(orderBy));
     return prenotationsRepository.findAll(pageable);
+  }
+
+  public List<Prenotation> findAllByUser(User user) {
+    return prenotationsRepository.findAllByUser(user);
   }
 
   public Prenotation findById(Long id) throws NotFoundException {
