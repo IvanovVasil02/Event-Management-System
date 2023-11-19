@@ -42,9 +42,9 @@ public class Event {
     if (this == o) return true;
     if (o == null || getClass() != o.getClass()) return false;
     Event event = (Event) o;
-    return availablePlaces == event.availablePlaces && Objects.equals(id, event.id) && Objects.equals(title, event.title) && Objects.equals(description, event.description) && Objects.equals(date, event.date) && Objects.equals(location, event.location) && Objects.equals(picture, event.picture) && Objects.equals(manager, event.manager) && Objects.equals(prenotationList, event.prenotationList);
+    return availablePlaces == event.availablePlaces && Objects.equals(id, event.id) && Objects.equals(title, event.title) && Objects.equals(description, event.description) && Objects.equals(date, event.date) && Objects.equals(location, event.location) && Objects.equals(picture, event.picture) && Objects.equals(manager, event.manager);
   }
-  
+
 
   public static class EventsBuilder {
     Faker f = new Faker(Locale.ITALY);

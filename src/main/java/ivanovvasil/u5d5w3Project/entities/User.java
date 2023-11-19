@@ -16,8 +16,8 @@ import java.util.Locale;
 import java.util.Objects;
 
 @Entity
-@AllArgsConstructor
 @NoArgsConstructor
+@AllArgsConstructor
 @Builder(builderClassName = "UsersBuilder")
 @Getter
 @Setter
@@ -36,6 +36,14 @@ public class User implements UserDetails {
   @JsonIgnore
   @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE)
   private List<Prenotation> prenotationList;
+
+  public User(Long id, String name, String surname, String email, Role role) {
+    this.id = id;
+    this.name = name;
+    this.surname = surname;
+    this.email = email;
+    this.role = role;
+  }
 
   @Override
   public boolean equals(Object o) {

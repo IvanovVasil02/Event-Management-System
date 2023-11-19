@@ -76,13 +76,13 @@ public class UsersController {
   @DeleteMapping("/{id}")
   @PreAuthorize("hasAuthority('MANAGER')")
   @ResponseStatus(HttpStatus.NO_CONTENT)
-  public void deleteUser(@PathVariable Long id) {
+  public void deleteUser(@PathVariable Long id) throws IOException {
     usersService.findByIdAndDelete(id);
   }
 
   @DeleteMapping("/me")
   @ResponseStatus(HttpStatus.NO_CONTENT)
-  public void deleteProfile(@AuthenticationPrincipal User user) {
+  public void deleteProfile(@AuthenticationPrincipal User user) throws IOException {
     usersService.findByIdAndDelete(user.getId());
   }
 

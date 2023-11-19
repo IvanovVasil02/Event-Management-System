@@ -57,7 +57,7 @@ public class UsersService {
     return usersRepository.save(found);
   }
 
-  public void findByIdAndDelete(Long id) throws NotFoundException {
+  public void findByIdAndDelete(Long id) throws IOException {
     usersRepository.delete(this.findById(id));
   }
 
