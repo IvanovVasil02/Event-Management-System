@@ -80,7 +80,6 @@ public class EventsService {
   public EventResponseDTO getEventByid(Long id) throws NotFoundException {
     Event event = this.findById(id);
     return ConvertToResponseEventDTO(event);
-
   }
 
   public Event findByIdAndUpdate(User admin, Long id, EventDTO body) throws NotFoundException, IOException {

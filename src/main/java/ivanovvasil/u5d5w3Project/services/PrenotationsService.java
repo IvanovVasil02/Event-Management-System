@@ -3,6 +3,7 @@ package ivanovvasil.u5d5w3Project.services;
 import ivanovvasil.u5d5w3Project.entities.Event;
 import ivanovvasil.u5d5w3Project.entities.Prenotation;
 import ivanovvasil.u5d5w3Project.entities.User;
+import ivanovvasil.u5d5w3Project.exceptions.BadRequestException;
 import ivanovvasil.u5d5w3Project.exceptions.NoAvailablePlacesException;
 import ivanovvasil.u5d5w3Project.exceptions.NotFoundException;
 import ivanovvasil.u5d5w3Project.payloadsDTO.EventResponseDTO;
@@ -45,11 +46,14 @@ public class PrenotationsService {
     prenotationsRepository.deleteById(id);
   }
 
-  public PrenotationResponseDTO bookEvent(User user, Long id) throws NoAvailablePlacesException {
-    Event event = eventsService.findById(id);
+  public PrenotationResponseDTO bookEvent(User user, Long event_id) throws NoAvailablePlacesException, BadRequestException {
+    Event event = eventsService.findById(event_id);
+    if (prenotationsRepository.checkPrenotationAlreadyExistsById(user.getId(), event_id)) {
+      throw new BadRequestException("You have already made a reservation for this event: " + event.getTitle());
+    }
     event.setAvailablePlaces(event.getAvailablePlaces() - 1);
     EventResponseDTO eventResponseDTO = eventsService.ConvertToResponseEventDTO(event);
-    int totalPrenotation = prenotationsRepository.findAllById(id).size();
+    int totalPrenotation = prenotationsRepository.findAllById(event_id).size();
     if (event.getAvailablePlaces() > 0) {
       Prenotation prenotation = Prenotation.builder().user(user).event(event).build();
       prenotationsRepository.save(prenotation);
