@@ -8,6 +8,7 @@ import lombok.*;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Locale;
+import java.util.Objects;
 import java.util.Random;
 import java.util.concurrent.ThreadLocalRandom;
 
@@ -35,6 +36,15 @@ public class Event {
   @JsonIgnore
   @OneToMany(mappedBy = "event", cascade = CascadeType.REMOVE)
   private List<Prenotation> prenotationList;
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) return true;
+    if (o == null || getClass() != o.getClass()) return false;
+    Event event = (Event) o;
+    return availablePlaces == event.availablePlaces && Objects.equals(id, event.id) && Objects.equals(title, event.title) && Objects.equals(description, event.description) && Objects.equals(date, event.date) && Objects.equals(location, event.location) && Objects.equals(picture, event.picture) && Objects.equals(manager, event.manager) && Objects.equals(prenotationList, event.prenotationList);
+  }
+  
 
   public static class EventsBuilder {
     Faker f = new Faker(Locale.ITALY);

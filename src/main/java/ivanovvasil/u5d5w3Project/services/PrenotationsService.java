@@ -48,7 +48,7 @@ public class PrenotationsService {
   public PrenotationResponseDTO bookEvent(User user, Long id) throws NoAvailablePlacesException {
     Event event = eventsService.findById(id);
     event.setAvailablePlaces(event.getAvailablePlaces() - 1);
-    EventResponseDTO eventResponseDTO = eventsService.converToEventDTO(event);
+    EventResponseDTO eventResponseDTO = eventsService.ConvertToResponseEventDTO(event);
     int totalPrenotation = prenotationsRepository.findAllById(id).size();
     if (event.getAvailablePlaces() > 0) {
       Prenotation prenotation = Prenotation.builder().user(user).event(event).build();

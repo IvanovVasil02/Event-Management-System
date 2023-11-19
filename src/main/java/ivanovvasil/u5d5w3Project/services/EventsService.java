@@ -37,26 +37,19 @@ public class EventsService {
 
   public EventResponseDTO save(User admin, EventDTO body) throws IOException {
     User user = usersRepository.findById(admin.getId()).orElseThrow(() -> new NotFoundException(admin.getId()));
-    Event newEvent = new Event();
-    newEvent.setTitle(body.title());
-    newEvent.setDescription(body.description());
-    newEvent.setLocation(body.location());
-    newEvent.setDate(LocalDate.parse(body.date()));
-    newEvent.setAvailablePlaces(body.availablePlaces());
-    if (body.picture() != null) {
-      newEvent.setPicture(body.picture());
-    } else {
+    Event newEvent = this.ConvertToEvent(body);
+    if (body.picture() == null) {
       newEvent.setPicture("https://spotme.com/wp-content/uploads/2020/07/Hero-1.jpg");
     }
     newEvent.setManager(user);
     eventsRepository.save(newEvent);
-    return this.converToEventDTO(newEvent);
+    return this.ConvertToResponseEventDTO(newEvent);
   }
 
   public Page<EventResponseDTO> findAll(int page, int size, String orderBy) {
     Pageable pageable = PageRequest.of(page, size, Sort.by(orderBy));
     Page<Event> eventPage = eventsRepository.findAll(pageable);
-    return eventPage.map(this::converToEventDTO);
+    return eventPage.map(this::ConvertToResponseEventDTO);
   }
 
   //findAll for runner
@@ -86,12 +79,12 @@ public class EventsService {
 
   public EventResponseDTO getEventByid(Long id) throws NotFoundException {
     Event event = this.findById(id);
-    return converToEventDTO(event);
+    return ConvertToResponseEventDTO(event);
 
   }
 
-  public Event findByIdAndUpdate(User admin, Long id, EventDTO body) throws IOException {
-    Event event = this.findById(admin.getId());
+  public Event findByIdAndUpdate(User admin, Long id, EventDTO body) throws NotFoundException, IOException {
+    Event event = this.findById(id);
     User user = usersRepository.findById(admin.getId()).orElseThrow(() -> new NotFoundException(admin.getId()));
     event.setTitle(body.title());
     event.setDescription(body.description());
@@ -106,10 +99,20 @@ public class EventsService {
     eventsRepository.delete(this.findById(id));
   }
 
-  public EventResponseDTO converToEventDTO(Event event) {
+  public EventResponseDTO ConvertToResponseEventDTO(Event event) {
     return new EventResponseDTO(event.getId(), event.getTitle(), event.getDescription(),
             event.getDate().toString(), event.getLocation(),
             event.getAvailablePlaces(), event.getPicture(),
             event.getManager().getUsername());
   }
+
+  public Event ConvertToEvent(EventDTO event) {
+    return Event.builder().title(event.title())
+            .description(event.description())
+            .date(LocalDate.parse(event.date()))
+            .location(event.location())
+            .availablePlaces(event.availablePlaces())
+            .picture(event.picture()).build();
+  }
+
 }

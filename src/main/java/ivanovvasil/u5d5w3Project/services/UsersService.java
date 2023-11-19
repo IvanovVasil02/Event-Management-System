@@ -22,18 +22,13 @@ import java.util.List;
 
 @Service
 public class UsersService {
+
   @Autowired
   private UsersRepository usersRepository;
   @Autowired
   private EventsService eventsService;
   @Autowired
   private PrenotationsService prenotationsService;
-
-  public void save(User user) {
-    if (!usersRepository.existsByEmail(user.getEmail())) {
-      usersRepository.save(user);
-    }
-  }
 
 
   //findALl for users runner

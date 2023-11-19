@@ -26,6 +26,16 @@ public class UserAuthenticationService {
   @Autowired
   private JWTools jwTools;
 
+  //  save method for user runner
+  public User save(User user) {
+    if (!usersRepository.existsByEmail(user.getEmail())) {
+      user.setPassword(passwordEncoder.encode(user.getPassword()));
+      return usersRepository.save(user);
+    } else {
+      return null;
+    }
+  }
+
   public CreatedUserDTO registerUser(UserDTO body) throws IOException {
     usersRepository.findByEmail(body.email()).ifPresent(author -> {
       throw new BadRequestException("The email  " + author.getEmail() + " is already used!");
