@@ -92,7 +92,7 @@ public class UsersServiceTest {
   public void testFindByIdAndUpdateUserReturnNotFound() throws IOException {
     UserDTO updatedUser = new UserDTO("Franck223", "Johnson2", faker.internet().emailAddress(), "pic1");
     Assertions.assertThrows(NotFoundException.class, () -> {
-      User updatedEmployee = usersService.findByIdAndUpdate(32000L, updatedUser);
+      User userNotFound = usersService.findByIdAndUpdate(32000L, updatedUser);
     });
   }
 
