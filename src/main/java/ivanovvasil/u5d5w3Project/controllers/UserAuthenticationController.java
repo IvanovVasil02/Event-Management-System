@@ -17,7 +17,7 @@ import java.io.IOException;
 
 @RestController
 @RequestMapping("/authentication")
-public class UserAunthenticationController {
+public class UserAuthenticationController {
   @Autowired
   private UserAuthenticationService authenticationService;
 
