@@ -1,6 +1,7 @@
 package ivanovvasil.u5d5w3Project.controllers;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.github.javafaker.Faker;
 import ivanovvasil.u5d5w3Project.payloadsDTO.CreatedUserDTO;
 import ivanovvasil.u5d5w3Project.payloadsDTO.UserDTO;
 import ivanovvasil.u5d5w3Project.payloadsDTO.UserLoginDTO;
@@ -18,6 +19,7 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 import java.io.IOException;
+import java.util.Locale;
 
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 
@@ -41,7 +43,7 @@ public class UsersControllerTest {
 
   @BeforeEach
   public void setUp() throws IOException {
-    userDTO = new UserDTO("Franck", "Johnson", "taaassaest0909@gmail.com", "12345678");
+    userDTO = new UserDTO("Franck", "Johnson", "tst0909@gmail.com", "12345678");
     createdUserDTO = userAuthenticationService.registerUser(userDTO);
     UserLoginDTO userLoginDTO = new UserLoginDTO("admin@gmail.com", "1234");
     token = userAuthenticationService.authenticateUser(userLoginDTO);
@@ -52,6 +54,64 @@ public class UsersControllerTest {
     if (createdUserDTO != null) {
       usersService.findByIdAndDelete(createdUserDTO.id());
     }
+  }
+
+  @Test
+  public void TestRegisterUserReturn201() throws Exception {
+    Faker faker = new Faker(Locale.ITALY);
+    userDTO = new UserDTO("Franck", "Johnson", faker.internet().emailAddress(), "12345678");
+    String requestBody = objectMapper.writeValueAsString(userDTO);
+    mockMvc.perform(MockMvcRequestBuilders.post("/authentication/register")
+                    .header("Authorization", "Bearer " + token)
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content(requestBody))
+            .andExpect(MockMvcResultMatchers.status().isCreated()).andDo(print());
+  }
+
+  @Test
+  public void TestRegisterUserReturn400() throws Exception {
+    Faker faker = new Faker(Locale.ITALY);
+    userDTO = new UserDTO("Franck", "", faker.internet().emailAddress(), "12345678");
+    String requestBody = objectMapper.writeValueAsString(userDTO);
+    mockMvc.perform(MockMvcRequestBuilders.post("/authentication/register")
+                    .header("Authorization", "Bearer " + token)
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content(requestBody))
+            .andExpect(MockMvcResultMatchers.status().isBadRequest()).andDo(print());
+  }
+
+  @Test
+  public void TestLoginUserReturn200() throws Exception {
+    UserLoginDTO userLoginDTO = new UserLoginDTO("tst0909@gmail.com", "12345678");
+    String requestBody = objectMapper.writeValueAsString(userLoginDTO);
+    mockMvc.perform(MockMvcRequestBuilders.post("/authentication/login")
+                    .header("Authorization", "Bearer " + token)
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content(requestBody))
+            .andExpect(MockMvcResultMatchers.status().isOk()).andDo(print());
+  }
+
+  @Test
+  public void TestLoginUserReturn400() throws Exception {
+    UserLoginDTO userLoginDTO = new UserLoginDTO("tst0909@gmail.com", "");
+    String requestBody = objectMapper.writeValueAsString(userLoginDTO);
+    mockMvc.perform(MockMvcRequestBuilders.post("/authentication/login")
+                    .header("Authorization", "Bearer " + token)
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content(requestBody))
+            .andExpect(MockMvcResultMatchers.status().isBadRequest()).andDo(print());
+  }
+
+  @Test
+  public void TestRegisterUserReturn400CauseAlreadyUsedEmail() throws Exception {
+    Faker faker = new Faker(Locale.ITALY);
+    userDTO = new UserDTO("Franck", "esdsfsd", "tst0909@gmail.com", "12345678");
+    String requestBody = objectMapper.writeValueAsString(userDTO);
+    mockMvc.perform(MockMvcRequestBuilders.post("/authentication/register")
+                    .header("Authorization", "Bearer " + token)
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content(requestBody))
+            .andExpect(MockMvcResultMatchers.status().isBadRequest()).andDo(print());
   }
 
   @Test
