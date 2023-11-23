@@ -60,7 +60,7 @@ public class EventsServiceTest {
       Event found = eventsService.findById(event.getId());
     });
   }
-
+  
   @Test
   public void testFindByIdAndUpdateEventReturnUpdatedEvent() throws IOException {
     EventDTO eventUpdates = new EventDTO("Meeting2", "meeting2", "2023-11-25", "Rome2", 7, "Img2");
