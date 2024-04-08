@@ -30,18 +30,19 @@ This project is a web application that allows users to view a list of events, bo
 
 1. **Clone the Repository**: Clone the repository to a local directory using the following command:
 
-***git clone https://github.com/tuo-username/event-management-system.git***
+```git clone https://github.com/tuo-username/event-management-system.git```
 
 2. **Configure Environment Variables**:
 
 - Create a file named `env.properties` in the project's main directory.
 - Add the following variables to the `env.properties` file and replace the variable values with your credentials:
 
-***CLOUDINARY_NAME=cloudinary_name
+```CLOUDINARY_NAME=cloudinary_name
 CLOUDINARY_KEY=cloudinary_key
 CLOUDINARY_SECRET=cloudinary_secret
 DB_PASSWORD=db_password
-JWT_SECRET=jwt_secret***
+JWT_SECRET=jwt_secret
+```
 
 3. **Configure the Database**: Set up a PostgreSQL instance and insert the password into the `env.properties` file as DB_PASSWORD.
 
